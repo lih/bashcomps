@@ -1,0 +1,7 @@
+#!/usr/bin/setup
+# -*- mode: shelell-script -*-
+Setup.import Pkg
+Pkg.man-pages bashcomps.1 
+case "$1" in
+    package) prepare .dist/package.tar.gz = Tar -"s,${SETUP_PREFIX}root/,," $(find root -type f);;
+esac
