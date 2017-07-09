@@ -1,13 +1,14 @@
 #!/usr/bin/setup
 # -*- mode: shell-script -*-
-Setup.import Pkg Doc
+Setup.use Pkg Doc
 
 case "$1" in
     package)
 	libfiles=( $(find lib -type f) )
 	libfiles=( "${libfiles[@]#lib/}" )
-	Pkg.withManPages bashcomps.1 \
-	   Pkg.setFiles etc/profile.d/bashcomps.sh=etc/bashcomps.sh \
-	   $(for lib in "${libfiles[@]}"; do echo "usr/share/bash/$lib=lib/$lib"; done)
+	Pkg.package \
+	    Pkg.man-pages bashcomps.1 \
+	    Pkg.files etc/profile.d/bashcomps.sh=etc/bashcomps.sh \
+	    $(for lib in "${libfiles[@]}"; do echo "usr/share/bash/$lib=lib/$lib"; done)
 	;;
 esac
