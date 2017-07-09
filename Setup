@@ -1,7 +1,13 @@
 #!/usr/bin/setup
-# -*- mode: shelell-script -*-
-Setup.import Pkg
-Pkg.man-pages bashcomps.1 
+# -*- mode: shell-script -*-
+Setup.import Pkg Doc
+
 case "$1" in
-    package) prepare .dist/package.tar.gz = Tar -"s,${SETUP_PREFIX}root/,," $(find root -type f);;
+    package)
+	libfiles=( $(find lib -type f) )
+	libfiles=( "${libfiles[@]#lib/}" )
+	Pkg.withManPages bashcomps.1 \
+	   Pkg.setFiles etc/profile.d/bashcomps.sh=etc/bashcomps.sh \
+	   $(for lib in "${libfiles[@]}"; do echo "usr/share/bash/$lib=lib/$lib"; done)
+	;;
 esac
