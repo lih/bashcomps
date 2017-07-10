@@ -360,8 +360,10 @@ if [ -z "$INCLUDED_BASHCOMPS" ]; then
 
 	function C.default() {
 	    local program="$(which "$1" 2>/dev/null || echo "$1")"
-	    local interp="$(head -1 "$program" 2>/dev/null)"
-	    local comp="${INTERPRETER_COMPS[.${interp#\#!}]}" 
+	    {
+		local interp="$(head -1 "$program")"
+	    } 2>/dev/null # necesary to silence the "null bytes ignored in input" message
+	    local comp="${INTERPRETER_COMPS[.${interp#\#!}]}"
 	    if [ -n "$comp" ]; then
 		local oldcomp="${BASHCOMPS[:]}" ret
 		BASHCOMPS[:]="$comp '${program//\'/\'\\\'\'}'"
@@ -369,9 +371,12 @@ if [ -z "$INCLUDED_BASHCOMPS" ]; then
 		ret="$?"
 		BASHCOMPS[:]="$oldcomp"
 		return "$ret"
+	    elif declare -F _completion_loader &> /dev/null; then
+		# Default to the bash_completion loader if all else fails, and it exists
+		_completion_loader "$@"
 	    fi
 	}
-	complete -D -F C.default -o default -o bashdefault -o nospace
+	complete -D -F C.default -o nospace
     }
     C.init
 
