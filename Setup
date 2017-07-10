@@ -1,5 +1,4 @@
 #!/usr/bin/setup
-# -*- mode: shell-script -*-
 Setup.use Pkg Doc
 
 case "$1" in
@@ -12,3 +11,8 @@ case "$1" in
 	    $(for lib in "${libfiles[@]}"; do echo "usr/share/bash/$lib=lib/$lib"; done)
 	;;
 esac
+
+# Local Variables:
+# mode: shell-script
+# sh-shell: bash
+# End:
