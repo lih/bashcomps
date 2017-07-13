@@ -1,13 +1,14 @@
 #!/usr/bin/setup
-Setup.use Pkg Doc
+if Setup.params -package; then
+    Setup.use Pkg Doc
 
-declare -a libfiles=( $(find lib -type f) )
-libfiles=( "${libfiles[@]#lib/}" )
-Pkg.package \
-    Pkg.man-pages bashcomps.1 \
-    Pkg.files etc/profile.d/bashcomps.sh=etc/bashcomps.sh \
-    $(for lib in "${libfiles[@]}"; do echo "usr/share/bash/$lib=lib/$lib"; done)
-
+    declare -a libfiles=( $(find lib -type f) )
+    libfiles=( "${libfiles[@]#lib/}" )
+    Pkg.package \
+        Pkg.man-pages bashcomps.1 \
+        Pkg.files etc/profile.d/bashcomps.sh=etc/bashcomps.sh \
+        $(for lib in "${libfiles[@]}"; do echo "usr/share/bash/$lib=lib/$lib"; done)
+fi
 # Local Variables:
 # mode: shell-script
 # sh-shell: bash
